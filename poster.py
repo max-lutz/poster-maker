@@ -334,6 +334,7 @@ def main(argv: list[str] | None = None):
     ap.add_argument("--dpi", type=int)
     ap.add_argument("--orientation", choices=["auto", "portrait", "landscape"])
     ap.add_argument("--no-title", action="store_true", help="hide the giant title, show the whole photo")
+    ap.add_argument("--jpg", action="store_true", help="save a high-quality JPEG (much smaller) instead of PNG")
     args = ap.parse_args(argv)
 
     config_path = Path(args.config)
@@ -351,16 +352,21 @@ def main(argv: list[str] | None = None):
     dpi = p.get("dpi") or default_dpi(p["size"])
     if args.output:
         out = Path(args.output)
+        as_jpg = args.jpg or out.suffix.lower() in (".jpg", ".jpeg")
     else:
+        as_jpg = args.jpg
         # slug comes from the footer "Titre" entry, falling back to the giant title
         footer_title = next((i["value"] for i in p.get("info", [])
                              if i["label"].lower() == "titre"), p["title"])
         ascii_title = unicodedata.normalize("NFKD", footer_title).encode("ascii", "ignore").decode()
         slug = re.sub(r"[^a-z0-9]+", "-", ascii_title.lower()).strip("-") or "poster"
         orient = "landscape" if img.width > img.height else "portrait"
-        out = base / "output" / f'{slug}_{p["size"]}_{orient}.png'
+        out = base / "output" / f'{slug}_{p["size"]}_{orient}.{"jpg" if as_jpg else "png"}'
     out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out, dpi=(dpi, dpi))
+    if as_jpg:
+        img.save(out, quality=95, subsampling=0, optimize=True, dpi=(dpi, dpi))
+    else:
+        img.save(out, dpi=(dpi, dpi))
     print(f"Saved {out}  ({img.width}x{img.height} px, {dpi} DPI)")
 
 
