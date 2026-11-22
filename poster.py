@@ -258,8 +258,16 @@ def render_gallery(cfg: dict, base: Path) -> Image.Image:
         label_f = shrink_to_fit(d, labels, str(base / fonts["label"]), s(13), col_w - s(8))
         mono_f = shrink_to_fit(d, [i["value"] for i in info], str(base / fonts["mono"]), s(12), col_w - s(8))
         y0 = foot_bottom - info_h
+        # equal gaps between items: measure each one, spread the leftover space evenly
+        widths = [max(d.textlength(labels[i], font=label_f),
+                      d.textlength(item["value"], font=mono_f)) for i, item in enumerate(info)]
+        # the scan code counts as the last item so its gap matches the others
+        n_items = len(info) + (1 if code else 0)
+        gap = (cw - sum(widths) - code_w) / (n_items - 1) if n_items > 1 else 0
+        x = m
         for i, item in enumerate(info):
-            x = m + i * col_w
+            if i:
+                x += widths[i - 1] + gap
             d.text((x, y0), labels[i], font=label_f, fill=ink)
             d.text((x, y0 + s(19)), item["value"], font=mono_f, fill=ink)
 
