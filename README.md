@@ -1,6 +1,17 @@
 # poster-maker
 
-Turn your own photos into print-ready retro posters: a full-width photo, a giant title filled by the photo itself, paper texture, film grain, an info row and a Spotify code (or QR code).
+Turn your own photos into print-ready retro posters. One command, one TOML config.
+
+![Example poster: a mountain photo shows through the giant title, with an info row and a QR code below](examples/mountain_A3.jpg)
+
+*A3 portrait. The photo continues up through the letters of the title. Everything around it is generated paper with film grain.*
+
+**What you get**
+- A full-width photo with a giant title filled by the photo itself (or the whole photo with no title)
+- Portrait or landscape output, following your photo
+- A3, 50x70 cm or any custom size, with a DPI you can set
+- A footer with an info row (in any language) and a Spotify code or QR code
+- Generated paper texture, vintage colour grade and film grain, all adjustable
 
 ```bash
 uv sync
