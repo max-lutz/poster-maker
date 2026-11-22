@@ -10,6 +10,7 @@ import argparse
 import re
 import sys
 import tomllib
+import unicodedata
 import urllib.request
 from pathlib import Path
 
@@ -351,7 +352,11 @@ def main(argv: list[str] | None = None):
     if args.output:
         out = Path(args.output)
     else:
-        slug = re.sub(r"[^a-z0-9]+", "-", p["title"].lower()).strip("-") or "poster"
+        # slug comes from the footer "Titre" entry, falling back to the giant title
+        footer_title = next((i["value"] for i in p.get("info", [])
+                             if i["label"].lower() == "titre"), p["title"])
+        ascii_title = unicodedata.normalize("NFKD", footer_title).encode("ascii", "ignore").decode()
+        slug = re.sub(r"[^a-z0-9]+", "-", ascii_title.lower()).strip("-") or "poster"
         orient = "landscape" if img.width > img.height else "portrait"
         out = base / "output" / f'{slug}_{p["size"]}_{orient}.png'
     out.parent.mkdir(parents=True, exist_ok=True)
