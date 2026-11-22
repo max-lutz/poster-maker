@@ -8,3 +8,6 @@ output/*
 !output/.gitkeep
 photos/*
 !photos/.gitkeep
+
+# local notes
+HANDOUT.md

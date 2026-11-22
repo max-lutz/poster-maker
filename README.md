@@ -37,5 +37,3 @@ A warning is printed when the photo is too small for the chosen size (about 150 
 ## Fonts
 
 Static fonts are in `fonts/` (SIL Open Font License, licences included): Jost ExtraBold, Inter Bold and IBM Plex Mono Regular. Jost and Inter are instanced from the Google Fonts variable files with fontTools.
-
-See [HANDOUT.md](HANDOUT.md) for the original concepts and exercises.
