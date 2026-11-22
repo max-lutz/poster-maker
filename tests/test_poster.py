@@ -94,3 +94,12 @@ def test_title_too_tall_is_an_error(tmp_path):
     cfg = make_cfg(title="il")
     with pytest.raises(ValueError):
         poster.render_gallery(cfg, tmp_path)
+
+
+def test_no_title_shows_whole_photo(tmp_path):
+    """Without the title the block is exactly as tall as the photo's shape needs, so nothing is cropped."""
+    save_photo(tmp_path, (600, 800))
+    with_title = poster.render_gallery(make_cfg(), tmp_path)
+    without = poster.render_gallery(make_cfg(show_title=False), tmp_path)
+    assert without.size == with_title.size
+    assert np.asarray(without).std() > 0 and not np.array_equal(np.asarray(with_title), np.asarray(without))

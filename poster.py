@@ -272,17 +272,24 @@ def render_gallery(cfg: dict, base: Path) -> Image.Image:
 
     # title + photo block
     title = p["title"]
-    title_f = fit_font(title, str(base / fonts["title"]), cw * p.get("title_width", 1.0))
-    tl, tt, tr, _ = ink_bbox(title_f, title)
-    ascent = title_f.getmetrics()[0]
-    hb = ascent - tt                                  # ink top -> baseline
+    show_title = p.get("show_title", True)
+    if show_title:
+        title_f = fit_font(title, str(base / fonts["title"]), cw * p.get("title_width", 1.0))
+        tl, tt, tr, _ = ink_bbox(title_f, title)
+        ascent = title_f.getmetrics()[0]
+        hb = ascent - tt                              # ink top -> baseline
+    else:
+        hb = 0                                        # no title: just the whole photo
     top_min = m + s(48)                               # keep clear of the crop marks
     avail = photo_bottom - (top_min + hb)             # room for the block below the baseline
     if avail <= 0:
         raise ValueError("Title too tall for this page: lower title_width or use a larger page")
     ideal = cw * photo.height / photo.width - hb      # block height that crops nothing
     bh = round(min(max(ideal, 0.3 * cw), avail))
-    baseline = photo_bottom - bh
+    if show_title:
+        baseline = photo_bottom - bh                  # block sits on the footer, title above it
+    else:
+        baseline = top_min + (avail - bh) // 2        # photo centred in the free space
     y_top = baseline - hb
     full_h = hb + bh
 
@@ -299,7 +306,8 @@ def render_gallery(cfg: dict, base: Path) -> Image.Image:
     mask = Image.new("L", (cw, full_h), 0)
     md = ImageDraw.Draw(mask)
     md.rectangle([0, hb, cw, full_h], fill=255)       # the photo block
-    md.text((-tl, -tt), title, font=title_f, fill=255)  # the title: photo continues up through it
+    if show_title:
+        md.text((-tl, -tt), title, font=title_f, fill=255)  # the title: photo continues up through it
     poster.paste(fitted, (m, y_top), mask)
 
     return add_grain(poster, eff["grain"])
@@ -316,6 +324,7 @@ def main(argv: list[str] | None = None):
     ap.add_argument("--size")
     ap.add_argument("--dpi", type=int)
     ap.add_argument("--orientation", choices=["auto", "portrait", "landscape"])
+    ap.add_argument("--no-title", action="store_true", help="hide the giant title, show the whole photo")
     args = ap.parse_args(argv)
 
     config_path = Path(args.config)
@@ -325,6 +334,9 @@ def main(argv: list[str] | None = None):
     for key in ("photo", "size", "dpi", "orientation"):
         if getattr(args, key) is not None:
             p[key] = getattr(args, key)
+
+    if args.no_title:
+        p["show_title"] = False
 
     img = LAYOUTS[p.get("layout", "gallery")](cfg, base)
     dpi = p.get("dpi") or default_dpi(p["size"])

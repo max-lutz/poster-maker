@@ -19,6 +19,7 @@ Everything lives in `config/poster.toml` (see the comments inside). Highlights:
 | `size` | `"A4"` (proofs), `"A3"`, or any `"<w>x<h>"` in cm such as `"50x70"` |
 | `dpi` | optional; defaults to 300 for A4/A3 and 150 for bigger formats |
 | `orientation` | `"auto"` (follows the photo), `"portrait"` or `"landscape"` |
+| `show_title` | `false` hides the giant title and shows the whole photo (also `--no-title`) |
 | `title_width` | fraction of the page width the title fills (try `0.7` on landscape) |
 | `focus` | `[x, y]` part of the photo kept in frame when a crop is needed |
 | `spotify` | Spotify link or URI; the code is downloaded once and cached in `assets/spotify/` |
