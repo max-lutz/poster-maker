@@ -1,0 +1,25 @@
+[poster]
+layout  = "classic"
+size    = "A4"          # "A4" or "A3"
+dpi     = 300
+title   = "RETRO"
+tagline = "Take a Trip to the Past – Scan Me"
+url     = "https://example.com"
+photo   = "photos/my_photo.jpg"
+paper   = "#e9e6df"
+ink     = "#1d1d1f"
+accent  = "#5b86c9"
+grain   = 14
+
+info = [
+  { label = "Title",   value = "Retro" },
+  { label = "Date",    value = "22/11/26" },
+  { label = "Place",   value = "Paris" },
+  { label = "Photo",   value = "Max" },
+  { label = "Edition", value = "No. 001" },
+]
+
+[fonts]
+title = "fonts/Jost-ExtraBold.ttf"
+label = "fonts/Inter-Bold.ttf"
+mono  = "fonts/IBMPlexMono-Regular.ttf"

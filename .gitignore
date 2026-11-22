@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# generated posters and personal photos
+output/*
+!output/.gitkeep
+photos/*
+!photos/.gitkeep
