@@ -20,7 +20,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 PAPER_MM = {"A4": (210, 297), "A3": (297, 420)}
 DESIGN_W = 794  # layout numbers are designed on a 794 px wide page (A4 at 96 DPI)
 EFFECTS = dict(saturation=0.85, contrast=0.92, warmth=0.05, fade=0.06,
-               grain=10, texture=1.0, creases=3)
+               grain=7, texture=1.0, creases=3)
 
 
 # ---------- units, sizes, orientation ----------

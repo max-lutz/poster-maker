@@ -27,7 +27,7 @@ saturation = 0.85
 contrast   = 0.92
 warmth     = 0.05
 fade       = 0.06
-grain      = 10       # film grain strength (0 = off)
+grain      = 7        # film grain strength (0 = off)
 texture    = 1.0      # paper texture strength (0 = flat paper)
 creases    = 3        # number of soft paper creases
 
